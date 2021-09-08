@@ -2,9 +2,29 @@
   "name": "root",
   "private": true,
   "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
+    "@commitlint/prompt-cli": "^8.3.5",
+    "cz-conventional-changelog": "^3.1.0",
+    "husky": "^4.2.5",
     "lerna": "^4.0.0"
   },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lerna run lint"
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
   "scripts": {
+    "commit": "git-cz",
     "start": "lerna run start --stream"
+  },
+  "dependencies": {
+    "git-cz": "^4.7.6"
   }
 }

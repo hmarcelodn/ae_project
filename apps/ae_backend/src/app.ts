@@ -1,10 +1,12 @@
 import express from 'express';
 
+import BaseController from './controllers/base';
+
 class App {
     public app: express.Application;
     public port: number;
 
-    constructor(controllers: Array<any>, port: number) {
+    constructor(controllers: Array<BaseController>, port: number) {
         this.app = express();
         this.port = port;
 
@@ -16,7 +18,7 @@ class App {
         this.app.use(express.json());
     }
 
-    protected initializeControllers(controllers: Array<any>) {
+    protected initializeControllers(controllers: Array<BaseController>) {
         controllers.forEach((controller) => {
             this.app.use('/', controller.router);
         })
