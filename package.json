@@ -22,7 +22,8 @@
   },
   "scripts": {
     "commit": "git-cz",
-    "start": "lerna run start --stream"
+    "start": "lerna run start --stream",
+    "pm2": "lerna run pm2 --stream"
   },
   "dependencies": {
     "git-cz": "^4.7.6"
