@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/server.ts && ts-node src/server.ts --experimental-worker"
+    "start": "nodemon src/server.ts && ts-node src/server.ts"
   },
   "author": "",
   "license": "ISC",
