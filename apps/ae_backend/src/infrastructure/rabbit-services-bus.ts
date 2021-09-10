@@ -40,6 +40,11 @@ class RabbitServiceBus {
             this.conn = connection;
             this.channel = channel;
         });
+
+        process.on('beforeExit', async (code: number) => {
+            await this.channel?.close();
+            await this.conn?.close();
+        });
     }
 
     send = () => {
