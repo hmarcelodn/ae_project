@@ -3,13 +3,16 @@ import Bull from 'bull';
 import { Service } from 'typedi';
 
 import BaseController from './base';
+import RabbitServiceBus from '../infrastructure/rabbit-services-bus';
 
 @Service()
 class HomeController extends BaseController {
     public path = '/';   
-    queue: Bull.Queue; 
+    protected queue: Bull.Queue;
 
-    constructor() {
+    constructor(
+        protected rabbitmqServiceBus: RabbitServiceBus
+    ) {
         super();
         this.queue = new Bull('intensive_queue', 'redis://127.0.0.1:6379');
         this.initializeRouter();
@@ -35,11 +38,19 @@ class HomeController extends BaseController {
         });
 
         res.sendStatus(200);
+        next();
+    }
+
+    veryLong = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+        this.rabbitmqServiceBus.send();
+        res.sendStatus(200);
+        next();
     }
 
     protected initializeRouter = (): void => {
         this.router.get(this.path, this.home);
         this.router.post(this.path, this.long);
+        this.router.post(`${this.path}verylong`, this.veryLong);
     }
 
 }
