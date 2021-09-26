@@ -17,7 +17,6 @@ export class PostgresClient {
     connect(): Promise<void> {
         return new Promise((resolve, reject) => {
             if (this._connection && this._connection.isConnected) {
-                console.log('already connected');
                 resolve();
             }
 
@@ -25,7 +24,6 @@ export class PostgresClient {
                 this._connection = connection;
 
                 process.on('SIGINT', async () => {
-                    console.log('killing');
                     await this._connection.close();
                 });
         

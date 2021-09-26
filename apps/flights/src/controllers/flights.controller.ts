@@ -38,14 +38,15 @@ class FlightsController extends BaseController {
 
         const flightRepository = getRepository(Flight);
 
-        let newFlight = new Flight();
-        newFlight.airline = airline;
-        newFlight.airportFrom = airportFrom;
-        newFlight.airportTo = airportTo;
-        newFlight.arrival = arrival;
-        newFlight.departure = departure;
-        newFlight.code = code;
-        newFlight.status = FlightStatus.ONTIME;
+        let newFlight = Flight.build({
+            airline: airline,
+            airportFrom: airportFrom,
+            airportTo: airportTo,
+            arrival: arrival,
+            departure: departure,
+            code: code,
+            status: FlightStatus.ONTIME
+        });
 
         newFlight = await flightRepository.save(newFlight);
 

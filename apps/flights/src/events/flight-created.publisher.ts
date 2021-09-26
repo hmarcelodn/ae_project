@@ -14,8 +14,6 @@ export class FlightCreatedPublisher extends BasePublisher<FlightCreatedEvent> {
     }
 
     protected async initializeQueues(): Promise<void> {
-        // await this.rabbitClientWrapper.connect();
-
         const { channel } = this.rabbitClientWrapper;
 
         // Exchanges
