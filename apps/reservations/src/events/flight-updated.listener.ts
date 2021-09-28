@@ -15,7 +15,7 @@ export class FlightUpdatedListener extends BaseListener<FlightUpdatedEvent> {
         super(rabbitClientWrapper);
     }
     
-    protected onMessage(message: any): void {
+    protected async onMessage(message: any): Promise<void> {
         console.log(message);
     }
 

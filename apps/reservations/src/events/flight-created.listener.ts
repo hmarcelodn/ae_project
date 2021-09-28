@@ -1,7 +1,8 @@
-import amqp from 'amqplib';
 import { Service } from 'typedi';
+import { Message } from 'amqplib';
 
 import { BaseListener } from './base.listener';
+import { Flight } from './../models/flight.model';
 import { FlightCreatedEvent } from './flight-created.event';
 import { RabbitClientWrapper } from '../infrastructure/rabbitmq-client.wrapper';
 
@@ -16,7 +17,7 @@ export class FlightCreatedListener extends BaseListener<FlightCreatedEvent> {
         super(rabbitClientWrapper);
     }
 
-    protected async setup() {
+    protected async setup(): Promise<void> {
         const { channel } = this.rabbitClientWrapper;
 
         await channel.assertExchange(
@@ -38,7 +39,19 @@ export class FlightCreatedListener extends BaseListener<FlightCreatedEvent> {
         );
     }
 
-    protected onMessage(message: any): void {
-        console.log('onMessage', message);
+    protected async onMessage(data: FlightCreatedEvent, message: Message | null): Promise<void> {
+        const {
+            flightId,
+            code
+        } = data;
+
+        const doc = new Flight({
+            flightId,
+            code
+        });
+
+        await doc.save();
+
+        this.rabbitClientWrapper.channel.ack(message!);
     }
 }

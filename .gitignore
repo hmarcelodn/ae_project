@@ -3,3 +3,4 @@ node_modules
 *.log
 dist
 postgres-data
+mongodb_data_container
