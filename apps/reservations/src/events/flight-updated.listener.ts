@@ -1,22 +1,20 @@
+import { Message } from 'amqplib';
 import { Service } from 'typedi';
 
 import { BaseListener } from './base.listener';
+import { Flight } from '../models/flight.model';
 import { FlightUpdatedEvent } from './flight-updated.event';
 import { RabbitClientWrapper } from '../infrastructure/rabbitmq-client.wrapper';
 
 @Service()
 export class FlightUpdatedListener extends BaseListener<FlightUpdatedEvent> {
-    public exchangeName: string = 'exchange.flight.updated';
-    public queueName: string = 'reservations.flight.updated';
+    protected readonly exchangeName: string = 'exchange.flight.updated';
+    protected readonly queueName: string = 'reservations.flight.updated';
 
     constructor(
         protected readonly rabbitClientWrapper: RabbitClientWrapper
     ) {
         super(rabbitClientWrapper);
-    }
-    
-    protected async onMessage(message: any): Promise<void> {
-        console.log(message);
     }
 
     protected async setup(): Promise<void> {
@@ -39,6 +37,18 @@ export class FlightUpdatedListener extends BaseListener<FlightUpdatedEvent> {
             '',
             { noAck: false, exclusive: false }
         );
+    }
+
+    protected async onMessage(data: FlightUpdatedEvent, message: Message | null): Promise<void> {
+        const {
+            flightId,
+        } = data;
+        
+        Flight.findOneAndUpdate({ flightId: flightId }, data, { upsert: false }, (err) => {
+            if (!err) {
+                this.rabbitClientWrapper.channel.ack(message!);
+            }
+        });
     }
 
 }

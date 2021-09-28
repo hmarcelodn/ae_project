@@ -8,8 +8,8 @@ import { RabbitClientWrapper } from '../infrastructure/rabbitmq-client.wrapper';
 
 @Service()
 export class FlightCreatedListener extends BaseListener<FlightCreatedEvent> {
-    exchangeName: string = 'exchange.flight.created';
-    queueName: string = 'reservations.flight.created';
+    protected readonly exchangeName: string = 'exchange.flight.created';
+    protected readonly queueName: string = 'reservations.flight.created';
 
     constructor(
         protected readonly rabbitClientWrapper: RabbitClientWrapper
@@ -42,16 +42,12 @@ export class FlightCreatedListener extends BaseListener<FlightCreatedEvent> {
     protected async onMessage(data: FlightCreatedEvent, message: Message | null): Promise<void> {
         const {
             flightId,
-            code
         } = data;
 
-        const doc = new Flight({
-            flightId,
-            code
+        Flight.findOneAndUpdate({ flightId: flightId }, data, { upsert: true }, (err) => {
+            if (!err) {
+                this.rabbitClientWrapper.channel.ack(message!);
+            }
         });
-
-        await doc.save();
-
-        this.rabbitClientWrapper.channel.ack(message!);
     }
 }

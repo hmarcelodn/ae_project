@@ -3,8 +3,8 @@ import { Message } from 'amqplib';
 import { RabbitClientWrapper } from '../infrastructure/rabbitmq-client.wrapper';
 
 export abstract class BaseListener<T> {
-    public abstract exchangeName: string;
-    public abstract queueName: string;
+    protected readonly abstract exchangeName: string;
+    protected readonly abstract queueName: string;
 
     constructor(
         protected readonly rabbitClientWrapper: RabbitClientWrapper
