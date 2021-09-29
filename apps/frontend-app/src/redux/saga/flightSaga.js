@@ -18,7 +18,6 @@ function getFlights() {
 function* fetchFlights(action) {
     try {
         const flights = yield call(getFlights);
-        console.log('test',flights);
         yield put({ type: 'GET_FLIGHTS_SUCCESS', flights: (flights || []) });
     } catch (e) {
         yield put({ type: 'GET_FLIGHTS_FAILED', message: e.message });
