@@ -1,6 +1,7 @@
 import express from 'express';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 import BaseController from './controllers/base';
 import Container from 'typedi';
@@ -42,6 +43,7 @@ class App {
         this.app.use(express.json());
         this.app.use(compression());
         this.app.use(cookieParser());
+        this.app.use(cors());
     }
 
     protected initializeControllers(controllers: Array<BaseController>): void {

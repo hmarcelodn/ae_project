@@ -20,6 +20,6 @@ Promise.resolve()
         flightsController
     ];
 
-    const app = new App(controllers, Number(process.env.PORT) || 3000);
+    const app = new App(controllers, Number(process.env.PORT) || 3001);
     app.listen();
 });

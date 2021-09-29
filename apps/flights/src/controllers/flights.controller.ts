@@ -26,6 +26,13 @@ class FlightsController extends BaseController {
         await this.flightUpdatedPublisher.initialize();
     }
 
+    async get(req: Request, res: Response, next: NextFunction) {
+        const flightRepository = getRepository(Flight);
+        const flights = await flightRepository.find();
+
+        res.status(200).send(flights);
+    }
+
     async create(req: Request, res: Response, next: NextFunction) {
         const {
             airline,
@@ -103,6 +110,7 @@ class FlightsController extends BaseController {
     protected initializeRouter = (): void => {
         this.router.post(this.path, this.create.bind(this));
         this.router.put(this.path, this.update.bind(this));
+        this.router.get(this.path, this.get.bind(this));
     }
 
 }

@@ -19,6 +19,6 @@ Promise.resolve()
 .then(() => flightUpdatedListener.listen())
 .then(() => {
     // const reservationController = Container.get(ReservationController);
-    const app = new App(Number(process.env.PORT) || 3001);
+    const app = new App(Number(process.env.PORT) || 3002);
     app.listen();
 });
